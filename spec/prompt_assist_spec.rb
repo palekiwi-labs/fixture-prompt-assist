@@ -30,5 +30,13 @@ RSpec.describe PromptAssist do
         PromptAssist.process_template("Hello {{missing}}!", {})
       }.to raise_error(PromptAssist::Error)
     end
+
+    it "combines template processing with text formatting" do
+      result = PromptAssist.process_template(
+        "   {{greeting}}    {{target}}   ",
+        { greeting: "Hello", target: "Ruby" }
+      )
+      expect(result).to eq("Hello Ruby")
+    end
   end
 end

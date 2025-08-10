@@ -40,5 +40,30 @@ RSpec.describe PromptAssist::TemplateProcessor do
       result = processor.process
       expect(result).to eq("Hello world!")
     end
+
+    it "raises error for nil template" do
+      processor = PromptAssist::TemplateProcessor.new(nil, {})
+      expect { processor.process }.to raise_error(PromptAssist::Error, "Template cannot be nil")
+    end
+
+    it "raises error for empty template" do
+      processor = PromptAssist::TemplateProcessor.new("", {})
+      expect { processor.process }.to raise_error(PromptAssist::Error, "Template cannot be empty")
+    end
+
+    it "raises error for malformed placeholders" do
+      processor = PromptAssist::TemplateProcessor.new("Hello {name}!", {})
+      expect { processor.process }.to raise_error(PromptAssist::Error, "Malformed template placeholders detected")
+    end
+
+    it "handles multiple occurrences of same variable" do
+      processor = PromptAssist::TemplateProcessor.new(
+        "{{greeting}} {{name}}, {{greeting}} again!",
+        { greeting: "Hello", name: "World" }
+      )
+      
+      result = processor.process
+      expect(result).to eq("Hello World, Hello again!")
+    end
   end
 end

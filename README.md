@@ -33,14 +33,29 @@ result = PromptAssist.process_template(
   { name: "Alice", place: "Wonderland" }
 )
 puts result # => "Hello Alice, welcome to Wonderland!"
+
+# Template processing also applies text formatting
+result = PromptAssist.process_template(
+  "   {{greeting}}    {{target}}   ",
+  { greeting: "Hello", target: "Ruby" }
+)
+puts result # => "Hello Ruby"
+
+# Handle multiple occurrences of same variable
+result = PromptAssist.process_template(
+  "{{greeting}} {{name}}, {{greeting}} again!",
+  { greeting: "Hello", name: "World" }
+)
+puts result # => "Hello World, Hello again!"
 ```
 
 ## Features
 
-- **Text Processing**: Formats and validates text input
-- **Template Processing**: Replace template variables with actual values
-- **Validation**: Ensures text meets basic requirements
-- **Error Handling**: Clear error messages for validation failures
+- **Text Processing**: Formats and validates text input by normalizing whitespace
+- **Template Processing**: Replace template variables with actual values using `{{variable}}` syntax
+- **Robust Validation**: Ensures text meets basic requirements and templates are well-formed
+- **Error Handling**: Clear error messages for validation failures and unresolved variables
+- **Safety Checks**: Detects malformed placeholders and prevents empty/nil templates
 
 ## Development
 
